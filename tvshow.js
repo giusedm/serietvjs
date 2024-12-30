@@ -5,6 +5,10 @@ const axios = require('axios');
 const log = require('debug')('streamingcommunity-addon');
 log.enabled = true;
 
+// Utilizzo delle variabili d'ambiente per configurare l'URL del backend e la porta
+const PYTHON_API_BASE_URL = process.env.PYTHON_API_BASE_URL || 'https://serietvpy.onrender.com';
+const PORT = process.env.PORT || 7000;
+
 // Configurazione dell'addon
 const builder = new addonBuilder({
     id: 'org.stremio.streamingcommunity',
@@ -16,9 +20,6 @@ const builder = new addonBuilder({
     catalogs: [],
     idPrefixes: ["tt"] // Prefisso per gli IMDb ID
 });
-
-// **Aggiornamento dell'URL base dell'API Python per usare IPv4**
-const PYTHON_API_BASE_URL = 'http://127.0.0.1:8000'; // Cambiato da 'http://localhost:8000' a 'http://127.0.0.1:8000'
 
 // Funzione per pulire il link m3u8
 function cleanM3u8Link(url) {
@@ -124,6 +125,6 @@ builder.defineStreamHandler(async (args) => {
 });
 
 // Avvia il server dell'addon
-serveHTTP(builder.getInterface(), { port: 7000, address: '0.0.0.0' });
+serveHTTP(builder.getInterface(), { port: PORT, address: '0.0.0.0' });
 
-log('Addon è in ascolto sulla porta 7000');
+log(`Addon è in ascolto sulla porta ${PORT}`);
